@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>I'm Sorry 💕</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:  #e8405a;
+      --blush: #ffd6dd;
+      --cream: #fff7f8;
+      --mauve: #c2607a;
+      --soft:  #ffeef1;
+      --text:  #3a1a22;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      min-height: 100dvh;
+      font-family: 'Lora', Georgia, serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── Floating hearts background ── */
+    .hearts-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+    .heart-float {
+      position: absolute;
+      bottom: -60px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+      user-select: none;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(-10deg) scale(0.8); opacity: 0; }
+      10%  { opacity: 0.55; }
+      90%  { opacity: 0.25; }
+      100% { transform: translateY(-110vh) rotate(15deg) scale(1.1); opacity: 0; }
+    }
+
+    /* ── Page wrapper ── */
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100dvh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: clamp(32px, 8vw, 72px) clamp(16px, 5vw, 32px);
+    }
+
+    /* ── Envelope ── */
+    .envelope-wrap {
+      position: relative;
+      margin-bottom: clamp(20px, 5vw, 52px);
+      cursor: pointer;
+      touch-action: manipulation;
+      animation: nudge 2.4s ease-in-out infinite;
+    }
+    @keyframes nudge {
+      0%,100% { transform: rotate(-3deg) scale(1); }
+      50%      { transform: rotate(3deg) scale(1.05); }
+    }
+    .envelope-wrap.opened { animation: none; }
+
+    .envelope {
+      width: clamp(155px, 42vw, 210px);
+      height: clamp(110px, 30vw, 152px);
+      background: var(--blush);
+      border-radius: 10px;
+      position: relative;
+      box-shadow: 0 14px 44px rgba(232,64,90,.22);
+      display: flex; align-items: flex-end; justify-content: center;
+      overflow: visible;
+    }
+    .envelope::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 56%;
+      background: var(--mauve);
+      clip-path: polygon(0 0, 50% 60%, 100% 0);
+      border-radius: 10px 10px 0 0;
+      transform-origin: top center;
+      transition: transform 0.6s cubic-bezier(.4,0,.2,1);
+    }
+    .envelope-wrap.opened .envelope::before { transform: rotateX(180deg); }
+    .envelope::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
+      background: #f5bfca;
+      clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    }
+    .env-left, .env-right {
+      position: absolute; top: 0; height: 100%;
+      background: #f0b8c4;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      width: 50%;
+    }
+    .env-left  { left: 0; }
+    .env-right { right: 0; transform: scaleX(-1); }
+
+    .letter-card {
+      position: absolute;
+      bottom: 14px;
+      width: 83%;
+      height: 58%;
+      background: white;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(0.82rem, 2.8vw, 1.05rem);
+      color: var(--rose);
+      box-shadow: 0 2px 10px rgba(0,0,0,.1);
+      transform: translateY(0);
+      transition: transform 0.7s cubic-bezier(.4,0,.2,1);
+      z-index: 10;
+    }
+    .envelope-wrap.opened .letter-card { transform: translateY(-120%); }
+
+    .tap-hint {
+      text-align: center;
+      font-size: clamp(0.6rem, 2vw, 0.78rem);
+      color: var(--mauve);
+      margin-top: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      animation: blink 1.8s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:.8} 50%{opacity:.3} }
+
+    /* ── Main card ── */
+    .card {
+      background: white;
+      border-radius: clamp(16px, 4vw, 28px);
+      max-width: 580px;
+      width: 100%;
+      padding: clamp(26px, 7vw, 56px) clamp(20px, 6vw, 52px);
+      box-shadow: 0 20px 70px rgba(232,64,90,.13);
+      text-align: center;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    .card.visible { opacity: 1; transform: translateY(0); }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, var(--blush), var(--rose), var(--blush));
+      border-radius: 28px 28px 0 0;
+    }
+
+    .big-heart {
+      font-size: clamp(2.8rem, 10vw, 4.5rem);
+      display: block;
+      margin-bottom: clamp(12px, 3.5vw, 22px);
+      animation: heartbeat 1.3s ease-in-out infinite;
+      line-height: 1;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      14%     { transform: scale(1.28); }
+      28%     { transform: scale(1); }
+      42%     { transform: scale(1.18); }
+      56%     { transform: scale(1); }
+    }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.6rem, 5.5vw, 2.9rem);
+      font-style: italic;
+      font-weight: 700;
+      color: var(--rose);
+      line-height: 1.2;
+      margin-bottom: clamp(16px, 4.5vw, 30px);
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 0 auto clamp(16px, 4.5vw, 30px);
+      max-width: 280px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blush), transparent);
+    }
+    .divider span { color: var(--rose); font-size: 1rem; }
+
+    p {
+      font-size: clamp(0.9rem, 2.6vw, 1.08rem);
+      line-height: 1.88;
+      color: #6b3044;
+      margin-bottom: clamp(12px, 3.5vw, 22px);
+    }
+    p:last-of-type { margin-bottom: 0; }
+
+    .signature {
+      margin-top: clamp(20px, 5vw, 38px);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(1.05rem, 3.2vw, 1.4rem);
+      color: var(--rose);
+    }
+
+    .stars {
+      font-size: clamp(0.9rem, 2.8vw, 1.3rem);
+      margin-top: clamp(18px, 4.5vw, 32px);
+      letter-spacing: 6px;
+      color: var(--blush);
+    }
+
+    /* ── Button ── */
+    .btn {
+      display: inline-block;
+      margin-top: clamp(22px, 5.5vw, 38px);
+      padding: clamp(13px, 3.5vw, 17px) clamp(26px, 7vw, 44px);
+      background: var(--rose);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Lora', serif;
+      font-size: clamp(0.88rem, 2.7vw, 1.05rem);
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(232,64,90,.35);
+      transition: transform .2s, box-shadow .2s, background .3s;
+      letter-spacing: 0.03em;
+      touch-action: manipulation;
+      -webkit-appearance: none;
+      min-width: clamp(170px, 52vw, 240px);
+    }
+    .btn:hover  { transform: translateY(-2px) scale(1.03); box-shadow: 0 10px 32px rgba(232,64,90,.45); }
+    .btn:active { transform: scale(0.96); }
+
+    /* ── Petals ── */
+    .petals-wrap {
+      position: fixed; inset: 0; pointer-events: none; z-index: 50;
+    }
+    .petal {
+      position: absolute;
+      opacity: 0;
+      animation: petalFall 1.8s ease-out forwards;
+      user-select: none;
+    }
+    @keyframes petalFall {
+      0%   { transform: translateY(-20px) rotate(0deg) scale(0); opacity: 1; }
+      60%  { opacity: 1; }
+      100% { transform: translateY(65vh) rotate(420deg) scale(1); opacity: 0; }
+    }
+
+    /* ── Landscape phone ── */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .page { justify-content: flex-start; padding-top: 20px; }
+      .envelope { width: 110px; height: 80px; }
+      .envelope-wrap { margin-bottom: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hearts-bg" id="heartsBg"></div>
+  <div class="petals-wrap" id="petals"></div>
+
+  <div class="page">
+
+    <div class="envelope-wrap" id="envelope" onclick="openEnvelope()">
+      <div class="envelope">
+        <div class="env-left"></div>
+        <div class="env-right"></div>
+        <div class="letter-card">💌 Open me</div>
+      </div>
+    </div>
+    <div class="tap-hint" id="tapHint">Tap to open ↑</div>
+
+    <div class="card" id="card">
+      <span class="big-heart">💗</span>
+
+      <h1>I'm so sorry,<br>I didn't mean to.</h1>
+
+      <div class="divider"><span>❀</span></div>
+
+      <p>
+        Whatever I did to hurt you, it was never my intention.
+        You mean the whole world to me, and the last thing
+        I ever want is to see you upset — especially because of me.
+      </p>
+
+      <p>
+        I know sorry isn't always enough, but please know that
+        my heart aches knowing you're hurting. I promise to do
+        better, to listen more, and to always put you first.
+      </p>
+
+      <p>
+        You deserve all the love, patience, and kindness in
+        the world — and I'm lucky every single day that I get
+        to be the one who gives it to you. 🌹
+      </p>
+
+      <div class="stars">✦ ✦ ✦ ✦ ✦</div>
+
+      <div class="signature">Forever yours 💕</div>
+
+      <button class="btn" id="loveBtn" onclick="sendLove()">💖 Send Love Back</button>
+    </div>
+
+  </div>
+
+  <script>
+    /* Floating hearts */
+    const bg = document.getElementById('heartsBg');
+    const emojis = ['❤️','💕','💗','💓','💞','🌸','✨','🌹','💝','💖'];
+    const total = window.innerWidth < 480 ? 12 : (window.innerWidth < 900 ? 18 : 24);
+    for (let i = 0; i < total; i++) {
+      const h = document.createElement('span');
+      h.className = 'heart-float';
+      h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.fontSize = (0.8 + Math.random() * 1.0) + 'rem';
+      h.style.animationDuration = (9 + Math.random() * 13) + 's';
+      h.style.animationDelay   = (Math.random() * 12) + 's';
+      bg.appendChild(h);
+    }
+
+    /* Open envelope */
+    function openEnvelope() {
+      const env  = document.getElementById('envelope');
+      const hint = document.getElementById('tapHint');
+      const card = document.getElementById('card');
+      if (env.classList.contains('opened')) return;
+      env.classList.add('opened');
+      hint.style.opacity = '0';
+      const rect = env.getBoundingClientRect();
+      burstPetals(rect.left + rect.width / 2, rect.top + rect.height / 2, 28);
+      setTimeout(() => {
+        card.classList.add('visible');
+        env.style.transition = 'opacity .5s';
+        env.style.opacity = '0';
+        hint.style.display = 'none';
+        setTimeout(() => env.style.display = 'none', 600);
+      }, 850);
+    }
+
+    /* Petal burst */
+    function burstPetals(cx, cy, n) {
+      const wrap  = document.getElementById('petals');
+      const items = ['🌸','🌺','🌹','💐','🌷','✨','💫','⭐','🌟','💕'];
+      const spread = Math.min(window.innerWidth * 0.38, 190);
+      for (let i = 0; i < n; i++) {
+        const el = document.createElement('span');
+        el.className = 'petal';
+        el.textContent = items[Math.floor(Math.random() * items.length)];
+        el.style.left = (cx + (Math.random() - 0.5) * spread * 2) + 'px';
+        el.style.top  = cy + 'px';
+        el.style.fontSize = (0.8 + Math.random() * 1.1) + 'rem';
+        el.style.animationDelay    = (Math.random() * 0.35) + 's';
+        el.style.animationDuration = (1.3 + Math.random() * 1.1) + 's';
+        wrap.appendChild(el);
+        setTimeout(() => el.remove(), 3200);
+      }
+    }
+
+    /* Send Love */
+    function sendLove() {
+      const btn = document.getElementById('loveBtn');
+      btn.textContent = '💖 Love you too! 💖';
+      btn.style.background = '#c2607a';
+      btn.disabled = true;
+      const W = window.innerWidth, H = window.innerHeight;
+      for (let i = 0; i < 6; i++) {
+        setTimeout(() => {
+          burstPetals(
+            W * (0.15 + Math.random() * 0.7),
+            H * (0.15 + Math.random() * 0.55),
+            16
+          );
+        }, i * 200);
+      }
+    }
+  </script>
+</body>
+</html>
