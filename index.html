@@ -1,96 +1,351 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy 3 Month ♡ — Love Letter</title>
-  <meta name="description" content="A cute interactive pixel-art love letter celebrating one month of marriage. Open the envelope and answer the question." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <script>document.documentElement.classList.add('js')</script>
-  <link rel="stylesheet" href="./love.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>just because.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF6EE;
+    --cream-2:#FFEFE1;
+    --rose:#E88B9D;
+    --rose-dark:#C96B7E;
+    --plum:#3D2B32;
+    --plum-soft:#6E5A5F;
+    --sage:#8FA888;
+    --butter:#F2C14E;
+    --paper:#FFFDF9;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      repeating-linear-gradient(135deg, rgba(233,180,164,0.05) 0px, rgba(233,180,164,0.05) 2px, transparent 2px, transparent 14px),
+      radial-gradient(circle at 20% 10%, var(--cream-2), var(--cream) 60%);
+    font-family:'Quicksand', sans-serif;
+    color:var(--plum);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:4rem 1.5rem 3rem;
+  }
+
+  header{
+    text-align:center;
+    margin-bottom:3.5rem;
+    max-width:600px;
+  }
+
+  .eyebrow{
+    font-size:0.8rem;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--sage);
+    font-weight:600;
+    margin-bottom:0.6rem;
+  }
+
+  h1{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:clamp(3rem, 9vw, 4.8rem);
+    color:var(--plum);
+    margin:0;
+    line-height:1;
+    position:relative;
+    display:inline-block;
+  }
+
+  h1 .sparkle{
+    position:absolute;
+    font-size:0.35em;
+    color:var(--butter);
+    top:-0.3em;
+    right:-0.5em;
+    animation:twinkle 2.4s ease-in-out infinite;
+  }
+
+  @keyframes twinkle{
+    0%,100%{ opacity:0.3; transform:scale(0.8) rotate(0deg); }
+    50%{ opacity:1; transform:scale(1.15) rotate(15deg); }
+  }
+
+  .subtitle{
+    margin-top:0.8rem;
+    font-size:1.05rem;
+    color:var(--plum-soft);
+    font-weight:500;
+  }
+
+  .hint{
+    margin-top:0.5rem;
+    font-size:0.85rem;
+    color:var(--rose-dark);
+    font-weight:600;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(190px, 1fr));
+    gap:2.6rem 2rem;
+    max-width:920px;
+    width:100%;
+  }
+
+  .polaroid{
+    perspective:1200px;
+    cursor:pointer;
+  }
+
+  .polaroid:nth-child(6n+1) .polaroid-inner{ transform:rotate(-3deg); }
+  .polaroid:nth-child(6n+2) .polaroid-inner{ transform:rotate(2deg); }
+  .polaroid:nth-child(6n+3) .polaroid-inner{ transform:rotate(-2deg); }
+  .polaroid:nth-child(6n+4) .polaroid-inner{ transform:rotate(4deg); }
+  .polaroid:nth-child(6n+5) .polaroid-inner{ transform:rotate(-4deg); }
+  .polaroid:nth-child(6n+6) .polaroid-inner{ transform:rotate(3deg); }
+
+  .polaroid.flipped:nth-child(6n+1) .polaroid-inner{ transform:rotate(-3deg) rotateY(180deg); }
+  .polaroid.flipped:nth-child(6n+2) .polaroid-inner{ transform:rotate(2deg) rotateY(180deg); }
+  .polaroid.flipped:nth-child(6n+3) .polaroid-inner{ transform:rotate(-2deg) rotateY(180deg); }
+  .polaroid.flipped:nth-child(6n+4) .polaroid-inner{ transform:rotate(4deg) rotateY(180deg); }
+  .polaroid.flipped:nth-child(6n+5) .polaroid-inner{ transform:rotate(-4deg) rotateY(180deg); }
+  .polaroid.flipped:nth-child(6n+6) .polaroid-inner{ transform:rotate(3deg) rotateY(180deg); }
+
+  .polaroid-inner{
+    position:relative;
+    width:100%;
+    aspect-ratio:0.82;
+    transform-style:preserve-3d;
+    transition:transform 0.6s cubic-bezier(.2,.9,.3,1.1), box-shadow 0.3s ease;
+  }
+
+  .polaroid:hover .polaroid-inner,
+  .polaroid:focus-visible .polaroid-inner{
+    box-shadow:0 18px 30px -12px rgba(61,43,50,0.35);
+  }
+
+  .polaroid:focus-visible{
+    outline:3px solid var(--sage);
+    outline-offset:4px;
+    border-radius:6px;
+  }
+
+  .face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    background:var(--paper);
+    border-radius:4px;
+    box-shadow:0 8px 18px -8px rgba(61,43,50,0.28);
+    padding:0.7rem 0.7rem 1rem;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .face.back{
+    transform:rotateY(180deg);
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:1.2rem;
+  }
+
+  .photo{
+    flex:1;
+    border-radius:2px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.8rem;
+    color:rgba(255,255,255,0.75);
+  }
+
+  .photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:2px;
+  }
+
+  .caption{
+    font-family:'Caveat', cursive;
+    font-weight:600;
+    font-size:1.35rem;
+    text-align:center;
+    margin-top:0.5rem;
+    color:var(--plum);
+  }
+
+  .note{
+    font-family:'Caveat', cursive;
+    font-size:1.4rem;
+    line-height:1.35;
+    color:var(--plum);
+  }
+
+  .note-date{
+    margin-top:0.6rem;
+    font-family:'Quicksand', sans-serif;
+    font-size:0.7rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--sage);
+    font-weight:600;
+  }
+
+  .tape{
+    position:absolute;
+    top:-14px;
+    left:50%;
+    width:60px;
+    height:24px;
+    transform:translateX(-50%) rotate(-4deg);
+    background:repeating-linear-gradient(45deg, rgba(255,255,255,0.35) 0 4px, transparent 4px 8px);
+    opacity:0.9;
+    z-index:2;
+    border-radius:1px;
+  }
+
+  .polaroid:nth-child(3n+1) .tape{ background-color:rgba(232,139,157,0.55); }
+  .polaroid:nth-child(3n+2) .tape{ background-color:rgba(143,168,136,0.55); }
+  .polaroid:nth-child(3n+3) .tape{ background-color:rgba(242,193,78,0.55); }
+
+  footer{
+    margin-top:4rem;
+    font-family:'Caveat', cursive;
+    font-size:1.3rem;
+    color:var(--plum-soft);
+    text-align:center;
+  }
+
+  @media (max-width:520px){
+    .polaroid-inner{ transform:rotate(0deg) !important; }
+    .polaroid.flipped .polaroid-inner{ transform:rotateY(180deg) !important; }
+    .grid{ grid-template-columns:1fr 1fr; gap:1.8rem 1.2rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .polaroid-inner{ transition:none; }
+    h1 .sparkle{ animation:none; }
+  }
+</style>
 </head>
 <body>
-  <!-- atmospheric background -->
-  <div class="fx" aria-hidden="true">
-    <div class="fx__aurora"></div>
-    <div class="fx__vignette"></div>
-    <div class="fx__grain"></div>
-  </div>
 
-  <!-- celebration hearts-rain layer (filled by JS on win) -->
-  <div class="rain" id="rain" aria-hidden="true"></div>
+<header>
+  <div class="eyebrow">no reason needed</div>
+  <h1>just because.<span class="sparkle">✦</span></h1>
+  <p class="subtitle">a little collection of us</p>
+  <p class="hint">tap a photo for a note on the back</p>
+</header>
 
-  <main class="scene">
-    <!-- Heart confetti layer (parallax depth, filled by JS) -->
-    <div class="confetti" id="confetti" aria-hidden="true"></div>
+<div class="grid" id="grid"></div>
 
-    <!-- STATE 1: shoot Cupid's arrow at the letter to open it -->
-    <div class="stage stage--aim" id="aimStage" tabindex="0" role="application"
-         aria-label="Aim and shoot Cupid's arrow at the letter to open it. Press space to shoot.">
+<footer>made with care, just for you 🤍</footer>
 
-      <!-- floating target: the closed envelope -->
-      <div class="target" id="target">
-        <div class="envelope" aria-hidden="true">
-          <span class="envelope__flap"></span>
-          <span class="heart envelope__seal"></span>
+<script>
+  /* ============================================================
+     CUSTOMIZE ME
+     - Change title/subtitle above in the <header> HTML directly.
+     - Edit the memories list below: one entry per polaroid.
+     - "img": leave as null to use a soft color placeholder,
+       or set it to a photo path/URL, e.g. "img": "photos/1.jpg"
+       (put an actual photo file next to this HTML file, or use
+       a full https:// link).
+     - "gradient": only used when img is null — pick any CSS
+       gradient you like for that placeholder card.
+     - "caption": short line under the photo (front of the card).
+     - "note": the handwritten message revealed when flipped.
+     - "date": small label in the corner of the note.
+  ============================================================ */
+  const memories = [
+    {
+      img: "first.jpg",
+      gradient: "linear-gradient(135deg, #E88B9D, #F2C14E)",
+      caption: "The first date",
+      note: "Falling in love when exams are just around the corner.",
+      date: "16/05/2026"
+    },
+    {
+      img: "ptb.jpg",
+      gradient: "linear-gradient(135deg, #8FA888, #C9DABF)",
+      caption: "Photobooth picture",
+      note: "Ai đó nói thi PTNK tiếng Anh trên 8 thì gửi mà tui không trên 8 thì vẫn gửi^^",
+      date: "10/06/2026"
+    },
+    {
+      img: "sky.jpg",
+      gradient: "linear-gradient(135deg, #F2C14E, #E88B9D)",
+      caption: "Sky",
+      note: "Thật ra lúc đó anh tải về chỉ vì muốn chơi chung với em:>",
+      date: "19/06/2026"
+    },
+    {
+      img: "flower.jpg",
+      gradient: "linear-gradient(135deg, #E88B9D, #8FA888)",
+      caption: "Hoa",
+      note: "Nhớ lúc đó em nói tặng hoa thành chính thức nên mua tặng em chứ em không nói thì anh vẫn tặng.",
+      date: "22/06/2026"
+    },
+    {
+      img: "movie.jpg",
+      gradient: "linear-gradient(135deg, #C96B7E, #F2C14E)",
+      caption: "Đi xem phim chung với mk và tuyên nè",
+      note: "Trong rạp ngồi phát cơm cho tuyên ăn:)))",
+      date: "18/07/2026"
+    },
+    {
+      img: "letters.jpg",
+      gradient: "linear-gradient(135deg, #8FA888, #E88B9D)",
+      caption: "Thư tình",
+      note: "Hog biéc ai viết cho anh vậy ta?",
+      date: "18/07/2026"
+    }
+    
+  ];
+
+  const grid = document.getElementById('grid');
+
+  memories.forEach((m, i) => {
+    const card = document.createElement('div');
+    card.className = 'polaroid';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Memory: ${m.caption}. Press to flip and read the note.`);
+
+    const photoContent = m.img
+      ? `<img src="${m.img}" alt="${m.caption}">`
+      : '';
+
+    card.innerHTML = `
+      <div class="polaroid-inner">
+        <div class="face front">
+          <span class="tape"></span>
+          <div class="photo" style="${m.img ? '' : `background:${m.gradient}`}">${photoContent}</div>
+          <div class="caption">${m.caption}</div>
         </div>
-        <p class="target__label">
-          <span class="heart heart--inline"></span>
-          Happy 3 Month
-          <span class="heart heart--inline"></span>
-        </p>
-      </div>
-
-      <!-- the flying arrow -->
-      <div class="arrow" id="arrow" aria-hidden="true"></div>
-
-      <!-- the bow -->
-      <div class="archer" id="archer" aria-hidden="true">
-        <div class="bow" id="bow"></div>
-        <span class="nock" id="nock"></span>
-      </div>
-
-      <p class="hint" id="hint">
-        <span id="hintText">Aim &amp; release to shoot Cupid&rsquo;s arrow</span>
-        <span class="heart heart--inline"></span>
-      </p>
-    </div>
-
-    <!-- STATE 2: opened "LOVE" window -->
-    <section class="window" id="window" aria-hidden="true">
-      <header class="titlebar">
-        <span class="titlebar__name">LOVE</span>
-        <span class="titlebar__btns">
-          <button class="winbtn" type="button" aria-label="Minimize" tabindex="-1">&#95;</button>
-          <button class="winbtn" type="button" aria-label="Maximize" tabindex="-1">&#9633;</button>
-          <button class="winbtn winbtn--x" type="button" id="closeBtn" aria-label="Close letter">&#10005;</button>
-        </span>
-      </header>
-
-      <div class="heartrow" aria-hidden="true">
-        <span class="heart"></span><span class="hdot"></span>
-        <span class="heart"></span><span class="hdot"></span>
-        <span class="heart"></span>
-      </div>
-
-      <div class="content" id="content">
-        <h1 class="title" id="title">Happy 3 month, my love ♡ Still love me?</h1>
-        <canvas class="cat" id="cat" width="16" height="16" aria-label="A little cat holding a heart" role="img"></canvas>
-        <div class="buttons" id="buttons">
-          <button class="btn btn--yes" type="button" id="yesBtn">YES</button>
-          <button class="btn btn--no"  type="button" id="noBtn">NO</button>
+        <div class="face back">
+          <div class="note">${m.note}</div>
+          <div class="note-date">${m.date}</div>
         </div>
-        <p class="final" id="final" hidden>
-          Three month of love, a <mark>lifetime</mark> to go.
-          Happy anniversary, my love
-          <span class="heart heart--inline"></span>
-        </p>
       </div>
-    </section>
-  </main>
+    `;
 
-  <script type="module" src="./love.js"></script>
+    const toggle = () => card.classList.toggle('flipped');
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+
+    grid.appendChild(card);
+  });
+</script>
+
 </body>
 </html>
