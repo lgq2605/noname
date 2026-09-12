@@ -15,13 +15,13 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://YOUR-USERNAME.github.io/five-months-tree/" />
   <meta property="og:title" content="Happy 5 Months ♥" />
-  <meta property="og:description" content="Pull back the bow, hit the heart, and watch it bloom into a tree of hearts." />
+  <meta property="og:description" content="Press the heart and watch it bloom into a tree of hearts." />
   <meta property="og:image" content="https://YOUR-USERNAME.github.io/five-months-tree/og.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Happy 5 Months ♥" />
-  <meta name="twitter:description" content="Pull back the bow, hit the heart, and watch it bloom into a tree of hearts." />
+  <meta name="twitter:description" content="Press the heart and watch it bloom into a tree of hearts." />
   <meta name="twitter:image" content="https://YOUR-USERNAME.github.io/five-months-tree/og.jpg" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -40,17 +40,18 @@
 
     <!-- ACT 1 — THE INVITATION ------------------------------------------------
          A single beating heart on a warm field. It is the only thing the
-         visitor has to do: tap it. Real <button> so it is tappable + keyboard
+         visitor has to do: press it. Real <button> so it is tappable + keyboard
          focusable; everything decorative around it is aria-hidden. -->
-    <section class="hero" id="hero" aria-label="Draw the bow to open your card">
+    <section class="hero" id="hero" aria-label="Press the heart to open your card">
       <div class="hero__bg" aria-hidden="true"></div>
       <div class="hero__motes" id="motes" aria-hidden="true"></div>
 
       <p class="hero__eyebrow" id="eyebrow">a little something, for you</p>
 
-      <!-- THE TARGET — the heart the arrow flies to (GSAP animates .target) -->
-      <div class="targetWrap" aria-hidden="true">
-        <div class="target" id="target">
+      <!-- THE TARGET — a real button, so tap/click and keyboard (Enter/Space)
+           both work natively, on phone and desktop alike. -->
+      <div class="targetWrap">
+        <button class="target" id="target" type="button" aria-label="Press the heart to continue">
           <span class="heart__glow" aria-hidden="true"></span>
           <span class="target__heart" id="targetHeart">
             <svg class="heart__svg" viewBox="0 0 100 92" aria-hidden="true">
@@ -71,108 +72,10 @@
               <ellipse cx="34" cy="30" rx="8.5" ry="5.4" fill="#fff" opacity=".72" style="mix-blend-mode:screen" />
             </svg>
           </span>
-        </div>
+        </button>
       </div>
 
-      <!-- THE BOW + ARROW — draw the string back, release to fire. The rig is
-           placed lower-left and rotated by JS to aim at the heart, so the shot
-           travels on a diagonal. A real control: role=button + keyboard drag. -->
-      <div class="archery" id="archery" role="button" tabindex="0"
-           aria-label="Draw the bow and release to send the arrow to the heart">
-
-          <!-- aim line, inside the rig so it points straight at the heart -->
-          <div class="aim" id="aim" aria-hidden="true"></div>
-
-          <!-- realistic recurve bow: wooden limbs, leather grip, a live string -->
-          <svg class="bow" id="bow" viewBox="0 0 460 300" aria-hidden="true">
-            <defs>
-              <linearGradient id="limb" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0"   stop-color="#4a2a1a" />
-                <stop offset=".18" stop-color="#6b3f24" />
-                <stop offset=".5"  stop-color="#8a5127" />
-                <stop offset=".82" stop-color="#6b3f24" />
-                <stop offset="1"   stop-color="#4a2a1a" />
-              </linearGradient>
-              <linearGradient id="limbHi" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="rgba(255,214,160,.8)" />
-                <stop offset="1" stop-color="rgba(255,214,160,0)" />
-              </linearGradient>
-              <linearGradient id="grip" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#2a1a10" />
-                <stop offset=".5" stop-color="#5a3822" />
-                <stop offset="1" stop-color="#2a1a10" />
-              </linearGradient>
-            </defs>
-            <!-- limb body (taper faked with two stacked strokes) -->
-            <path class="bow__limb" d="M34 96 C 118 168, 168 240, 230 252 C 292 240, 342 168, 426 96"
-                  fill="none" stroke="url(#limb)" stroke-width="13" stroke-linecap="round" />
-            <path class="bow__limbHi" d="M34 96 C 118 168, 168 240, 230 252 C 292 240, 342 168, 426 96"
-                  fill="none" stroke="url(#limbHi)" stroke-width="3" stroke-linecap="round" opacity=".7" />
-            <!-- recurve tip hooks -->
-            <path d="M34 96 C 22 82, 26 70, 40 66" fill="none" stroke="url(#limb)" stroke-width="8" stroke-linecap="round" />
-            <path d="M426 96 C 438 82, 434 70, 420 66" fill="none" stroke="url(#limb)" stroke-width="8" stroke-linecap="round" />
-            <!-- leather grip over the belly -->
-            <rect x="216" y="206" width="28" height="70" rx="9" fill="url(#grip)" />
-            <path d="M219 220h22 M219 236h22 M219 252h22" stroke="rgba(0,0,0,.35)" stroke-width="2" />
-            <!-- the string: two segments meeting at the nock (JS animates the nock).
-                 A warm taupe so the taut string actually reads against the cream. -->
-            <line class="bow__str" id="strL" x1="40" y1="70" x2="230" y2="96" stroke="#9a8068" stroke-width="2.2" stroke-linecap="round" />
-            <line class="bow__str" id="strR" x1="420" y1="70" x2="230" y2="96" stroke="#9a8068" stroke-width="2.2" stroke-linecap="round" />
-            <circle class="bow__serving" id="serving" cx="230" cy="96" r="4.5" fill="#6f5137" />
-          </svg>
-
-          <!-- the arrow: winged golden heart tip (Cupid), gold feather fletching -->
-          <svg class="arrow" id="arrow" viewBox="0 0 64 220" aria-hidden="true">
-            <defs>
-              <linearGradient id="shaft" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#4a2c14" />
-                <stop offset=".5" stop-color="#8a5a2c" />
-                <stop offset="1" stop-color="#3e2410" />
-              </linearGradient>
-              <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#ffe38c" />
-                <stop offset=".45" stop-color="#f4a626" />
-                <stop offset="1" stop-color="#a85f0e" />
-              </linearGradient>
-              <linearGradient id="feath" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#ff7f9c" />
-                <stop offset=".5" stop-color="#e6396a" />
-                <stop offset="1" stop-color="#a8154a" />
-              </linearGradient>
-              <linearGradient id="wing" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#ffffff" />
-                <stop offset="1" stop-color="#ffe0c4" />
-              </linearGradient>
-            </defs>
-
-            <!-- shaft (dark wood so it reads against the cream) -->
-            <rect x="29.4" y="30" width="5.2" height="168" rx="2.6" fill="url(#shaft)" />
-
-            <!-- angel wings flanking the heart tip -->
-            <g class="arrow__wings">
-              <path class="wingL" d="M31 30 C 10 16, 2 20, 4 34 C 12 30, 20 32, 31 40 Z" fill="url(#wing)" stroke="rgba(196,132,58,.72)" stroke-width="1.2"/>
-              <path class="wingR" d="M33 30 C 54 16, 62 20, 60 34 C 52 30, 44 32, 33 40 Z" fill="url(#wing)" stroke="rgba(196,132,58,.72)" stroke-width="1.2"/>
-            </g>
-
-            <!-- golden heart arrowhead (Cupid's love arrow) -->
-            <path class="arrow__head" d="M32 12 C 30 7, 22 6.5, 21.5 13 C 21 18, 27 22, 32 27 C 37 22, 43 18, 42.5 13 C 42 6.5, 34 7, 32 12 Z" fill="url(#gold)" stroke="#a5701a" stroke-width=".8" />
-            <ellipse cx="27" cy="13" rx="2.6" ry="1.7" fill="#fff" opacity=".8" style="mix-blend-mode:screen" />
-
-            <!-- gold feather fletching -->
-            <g class="arrow__fletch">
-              <path d="M32 150 C 16 156, 10 178, 15 200 C 24 194, 30 184, 32 176 Z" fill="url(#feath)" />
-              <path d="M32 150 C 48 156, 54 178, 49 200 C 40 194, 34 184, 32 176 Z" fill="url(#feath)" opacity=".92" />
-              <path d="M28 160l4 3 M26 170l6 3 M25 180l7 3" stroke="rgba(130,12,48,.45)" stroke-width="1" />
-              <path d="M36 160l-4 3 M38 170l-6 3 M39 180l-7 3" stroke="rgba(130,12,48,.45)" stroke-width="1" />
-            </g>
-            <!-- nock -->
-            <path d="M29 200 L32 205 L35 200" fill="none" stroke="#c9a25a" stroke-width="2" stroke-linecap="round"/>
-            <!-- invisible tip marker: JS measures it to land the head on the heart -->
-            <circle id="tip" cx="32" cy="9" r="0.6" fill="none" />
-          </svg>
-      </div>
-
-      <p class="hero__hint" id="hint">pull &amp; release</p>
+      <p class="hero__hint" id="hint">press the heart</p>
     </section>
 
     <!-- ACT 2 — THE FLOOD -----------------------------------------------------

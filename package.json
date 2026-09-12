@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "A 5-month anniversary film in four acts: draw a Cupid bow, strike a heart, and watch it bloom into a tree of hearts. Vanilla JS + GSAP, one canvas, no framework.",
+  "description": "A 5-month anniversary film in four acts: press a heart, watch it burst, and watch it bloom into a tree of hearts. Vanilla JS + GSAP, one canvas, no framework.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

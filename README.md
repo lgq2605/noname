@@ -1,9 +1,9 @@
-# Happy 5 Months 🏹💗🌳
+# Happy 5 Months 💗🌳
 
 A 5-month anniversary card that plays like a little film in your browser.
 
-You pull back a bow, shoot an arrow into a heart, and the heart bursts and grows
-into a tree made of hundreds of tiny hearts.
+You press a heart, and it bursts and grows into a tree made of hundreds of
+tiny hearts.
 
 There is no video file. It is all drawn live by the browser.
 
@@ -43,18 +43,17 @@ To stop it, press `Ctrl + C` in the terminal.
 
 ## How to play it
 
-- **Mouse or finger** — press on the bow, drag down to pull the string, then let go.
-- **Keyboard** — press `Tab` until the bow is selected, then press `Enter` or `Space`.
+- **Mouse or finger** — press the heart.
+- **Keyboard** — press `Tab` until the heart is selected, then press `Enter` or `Space`.
 - **Watch again** — an "Again" button shows up at the end.
 - If your computer is set to *reduce motion*, the film is skipped and you go
   straight to the finished tree.
 
 ## What happens, in order
 
-1. **The bow** — a heart beats gently and a small bow waits under it. Pull the
-   string back and let go.
-2. **The shot** — the string twangs, the arrow flies up, hits the heart, and the
-   heart bursts into a flood of rose colour.
+1. **The heart** — a heart beats gently on a warm field. Press it.
+2. **The burst** — the heart pops, throws a little burst of hearts, falls, and
+   bursts into a flood of rose colour.
 3. **The wish** — *Happy 5 Months* rises up out of that colour one letter at a
    time, a hand-drawn line sweeps underneath, and black film bars slide in.
 4. **The tree** — a gold light blooms, a bare tree grows and fills a

@@ -2,19 +2,17 @@
    HAPPY 5 MONTHS — an anniversary film in four acts
    Vanilla canvas 2D for the tree + GSAP for the orchestration.
 
-   ACT 1  a real recurve bow with a Cupid's arrow nocked — you
-          DRAW the string down and RELEASE to fire (pointer drag,
-          or keyboard). A softly beating heart waits above as the
-          target.
-   ACT 2  the arrow flies up and strikes the heart; the heart
-          jolts, falls, and bursts into a flood of rose that
-          swallows the frame (no cross-fade).
+   ACT 1  a softly beating heart waits on a warm field — a real
+          <button>, so a tap, click, or Enter/Space all press it.
+   ACT 2  the heart pops, throws a little burst of hearts, falls,
+          and bursts into a flood of rose that swallows the frame
+          (no cross-fade).
    ACT 3  a kinetic wish hinges up out of that colour, glyph by
           glyph, under cinema bars and a slow camera push.
    ACT 4  a gold light blooms, and the tree grows into one heart
           of lit blossoms with the hand-lettered wish.
 
-   A GSAP master timeline runs the shot + Acts 2–3; at its end it
+   A GSAP master timeline runs the press + Acts 2–3; at its end it
    starts the canvas tree (Act 4), which owns its own rAF and
    plays once, then holds — living, never looping.
    ============================================================ */
@@ -47,14 +45,6 @@ const motes      = $('motes');
 const target     = $('target');
 const targetHeart= $('targetHeart');
 const heartGlow  = target.querySelector('.heart__glow');
-const aim        = $('aim');
-
-const archery = $('archery');
-const bow     = $('bow');
-const arrow   = $('arrow');
-const strL    = $('strL');
-const strR    = $('strR');
-const serving = $('serving');
 
 const flood   = $('flood');
 const field   = $('field');
@@ -539,7 +529,7 @@ function drawFinal(){
 }
 
 /* ============================================================
-   ACTS 1–3 (GSAP) — the bow, the shot, the wish
+   ACTS 1–3 (GSAP) — the heart, the press, the wish
    ============================================================ */
 
 /* the two headline words become per-glyph spans so each hinges up on its own */
@@ -575,67 +565,6 @@ function buildMotes(){
   }
 }
 
-/* --- bow geometry (measured; re-measured on resize) -------------------------
-   The rig lives lower-left and is rotated so its local "up" axis points at the
-   heart; the shot therefore travels on a diagonal. The draw + arrow math all
-   live in the rig's LOCAL space (offset geometry is transform-independent, so
-   rotation never corrupts it); only the aim ANGLE and the flight DISTANCE come
-   from screen measurements. */
-const tip = $('tip');
-let svgScale = 1, arrowBaseX = 0, arrowBaseY = 0, maxDraw = 120, curDraw = 0;
-let pullUX = 0, pullUY = 1;                               // screen unit: string pull-back
-const REST_NOCK = 96;                                    // string nock, in bow viewBox units
-const nockProxy = { val: REST_NOCK };
-
-function applyNock(){
-  const y = nockProxy.val;
-  strL.setAttribute('y2', y); strR.setAttribute('y2', y); serving.setAttribute('cy', y);
-}
-
-function refreshRig(){
-  // the grip is anchored here, and the heart sits at its layout centre (33% down,
-  // centred) — using the layout point, not a live rect, keeps the aim steady even
-  // while the heart is scaling in.
-  const gripX = W * 0.24, gripY = H * 0.76;
-  const heartX = W * 0.5, heartY = H * 0.33;
-  // rotation so local "up" (0,-1) maps to the grip→heart direction
-  const aimRad = Math.atan2(heartX - gripX, gripY - heartY);
-  pullUX = -Math.sin(aimRad); pullUY = Math.cos(aimRad);  // opposite of aim = pull-back
-
-  // #bow / #arrow are SVG — no offset* — so measure rects in the rig's LOCAL
-  // frame: neutralise the rig transform first (getBBox-style, sync, no paint).
-  nockProxy.val = REST_NOCK; applyNock();
-  gsap.set(archery, { rotation: 0, scale: 1, x: 0, y: 0 });
-  archery.style.left = '0px'; archery.style.top = '0px';
-  gsap.set(arrow, { x: 0, y: 0 });
-  const aR = archery.getBoundingClientRect();
-  const bR = bow.getBoundingClientRect();
-  const sR = serving.getBoundingClientRect();
-  const rR = arrow.getBoundingClientRect();
-  svgScale = bR.width / 460;
-  const gripLX = (bR.left - aR.left) + 0.5 * bR.width;
-  const gripLY = (bR.top  - aR.top ) + (240 / 300) * bR.height;   // grip ~y240 in viewBox
-  const nockLX = (sR.left - aR.left) + 0.5 * sR.width;
-  const nockLY = (sR.top  - aR.top ) + 0.5 * sR.height;
-  arrowBaseX = nockLX - ((rR.left - aR.left) + 0.5 * rR.width);
-  arrowBaseY = nockLY - ((rR.top  - aR.top ) + (205 / 220) * rR.height);
-
-  // anchor the grip at (gripX,gripY) and rotate the rig around it
-  archery.style.left = (gripX - gripLX) + 'px';
-  archery.style.top  = (gripY - gripLY) + 'px';
-  gsap.set(archery, { transformOrigin: `${gripLX}px ${gripLY}px`, rotation: aimRad * 180 / Math.PI });
-  gsap.set(arrow, { x: arrowBaseX, y: arrowBaseY });
-  maxDraw = Math.min(bR.height * 0.72, H * 0.16, 132);
-  curDraw = 0;
-}
-
-function setDraw(d){
-  curDraw = clamp(d, 0, maxDraw);
-  gsap.set(arrow, { x: arrowBaseX, y: arrowBaseY + curDraw });   // local +Y = pull back
-  nockProxy.val = REST_NOCK + curDraw / svgScale; applyNock();
-  gsap.set(aim, { opacity: 0.55 * (curDraw / maxDraw) });
-}
-
 /* the target heart's beat — gentle, alive; killed the instant we fire */
 let beatTL = null;
 function startBeat(){
@@ -651,7 +580,7 @@ function startBeat(){
 }
 function stopBeat(){ if (beatTL){ beatTL.kill(); beatTL = null; } gsap.set(targetHeart, { scale: 1 }); }
 
-/* a little burst of hearts + sparks where the arrow strikes */
+/* a little burst of hearts + sparks where the heart pops */
 function miniHeartSVG(fill){
   return `<svg viewBox="0 0 24 22" width="100%" height="100%"><path d="M12 20C5.5 15 1.5 11.4 1.5 6.9 1.5 3.6 4 1.5 7 1.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3 0 5.5 2.1 5.5 5.4C23.5 11.4 19.5 15 12 20Z" fill="${fill}"/></svg>`;
 }
@@ -686,24 +615,17 @@ function burstHearts(){
   });
 }
 
-/* --- the shot + Acts 2–3 timeline ------------------------------------------ */
+/* --- the press + Acts 2–3 timeline ------------------------------------------ */
 function shotGeom(){
-  // flight distance = straight-line from the arrow tip to the heart (measured on
-  // screen, rotation-aware). Moving the arrow that far along its local "up" axis
-  // — which is aimed at the heart — lands the tip dead-centre on it.
-  const tipR = tip.getBoundingClientRect();
+  // impact point = the heart's own centre, plus how far it falls before it
+  // bursts into the flood.
   const tRect = target.getBoundingClientRect();
-  const tipX = tipR.left + tipR.width / 2, tipY = tipR.top + tipR.height / 2;
   const tcx = tRect.left + tRect.width / 2, tcy = tRect.top + tRect.height / 2;
-  const flightDist = Math.hypot(tcx - tipX, tcy - tipY);
   const fallPx = Math.min(H * 0.26, H - tcy - tRect.height * 0.4);
   const impactX = tcx, impactY = tcy + fallPx;
   const distC = Math.hypot(Math.max(impactX, W - impactX), Math.max(impactY, H - impactY));
   const reach = Math.hypot(W / 2, H / 2);
   return {
-    arrowStartY: arrowBaseY + curDraw,
-    arrowFlyY:   arrowBaseY + curDraw - flightDist,       // local -Y = toward the heart
-    drawnNock:   REST_NOCK + curDraw / svgScale,
     fallPx, fx: impactX - W / 2, fy: impactY - H / 2,
     floodScale: (distC * 1.12) / 70, bloomScale: (reach * 1.2) / 30,
   };
@@ -722,8 +644,7 @@ function buildFilm(m){
   });
 
   // reset (t=0)
-  t.set(target, { y: 0, scaleX: 1, scaleY: 1, opacity: 1 })
-   .set(arrow, { opacity: 1, x: arrowBaseX, y: m.arrowStartY, scaleY: 1 })
+  t.set(target, { x: 0, y: 0, scaleX: 1, scaleY: 1, opacity: 1 })
    .set([flood, bloom], { autoAlpha: 0, scale: 0.001, x: 0, y: 0 })
    .set(flood, { x: m.fx, y: m.fy })
    .set(field, { autoAlpha: 0 })
@@ -737,25 +658,17 @@ function buildFilm(m){
    .set(kChars, { transformPerspective: 620, transformOrigin: '50% 100%', yPercent: 135, rotationX: -82 })
    .set(uline, { drawn: 0 });
 
-  // --- the shot: string snaps (twang), arrow flies up into the heart --------
-  t.fromTo(nockProxy, { val: m.drawnNock }, { val: REST_NOCK, duration: 0.5, ease: 'elastic.out(1,0.34)', onUpdate: applyNock }, 0)
-   .to(arrow, { y: m.arrowFlyY, duration: 0.26, ease: 'power2.in' }, 0)
-   .to(arrow, { scaleY: 1.16, duration: 0.14, ease: 'power2.in' }, 0)
-   .to(arrow, { scaleY: 1.0, duration: 0.1, ease: 'power1.out' }, 0.16)
-   .to(aim, { opacity: 0, duration: 0.18 }, 0)
+  // --- the press: a little give under the finger, then it lets go -----------
+  t.to(target, { scale: 0.9, duration: 0.1, ease: 'power2.out' }, 0)
+   .to(target, { scale: 1.0, duration: 0.16, ease: 'power2.out' }, 0.1)
    .to([eyebrow, hint], { opacity: 0, duration: 0.2, ease: 'power1.out' }, 0);
 
-  // --- the strike: the arrow embeds, the heart recoils, then holds pierced --
+  // --- the burst: the heart pops, throws its little hearts, then holds ------
   t.add(burstHearts, 0.26)
-   // recoil along the arrow's line (up + right), springing back
-   .to(target, { x: 7, y: -9, duration: 0.06, ease: 'power2.out' }, 0.26)
-   .to(target, { x: 0, y: 0, duration: 0.32, ease: 'power2.out' }, 0.32)
+   .to(target, { y: -9, duration: 0.06, ease: 'power2.out' }, 0.26)
+   .to(target, { y: 0, duration: 0.32, ease: 'power2.out' }, 0.32)
    .to(target, { scale: 1.14, duration: 0.06, ease: 'power2.out' }, 0.26)
-   .to(target, { scale: 1.0, duration: 0.26, ease: 'power2.inOut' }, 0.32)
-   // the arrow shudders in the wound, holds embedded so the hit reads, then sinks in
-   .to(arrow, { rotation: '+=4', duration: 0.05, yoyo: true, repeat: 4, ease: 'sine.inOut' }, 0.27)
-   .set(arrow, { rotation: 0 }, 0.52)
-   .to(arrow, { opacity: 0, duration: 0.16, ease: 'power1.out' }, 0.56);
+   .to(target, { scale: 1.0, duration: 0.26, ease: 'power2.inOut' }, 0.32);
 
   // --- the fall + the burst / flood -----------------------------------------
   t.to(target, { y: m.fallPx, scaleX: 0.84, scaleY: 1.3, duration: 0.34, ease: 'power1.in' }, 0.64)
@@ -804,75 +717,39 @@ function buildFilm(m){
   return t;
 }
 
-/* --- draw / release interaction -------------------------------------------- */
-let played = false, drawing = false, startPX = 0, startPY = 0, startDraw = 0;
+/* --- press interaction ------------------------------------------------------
+   .target is a real <button>, so click covers mouse + touch + Enter/Space
+   natively — no custom drag math, no touch-event plumbing needed. */
+let played = false;
 
 function fire(){
   if (played) return;
   played = true;
-  drawing = false;
   stopBeat();
   cue('release'); cue('whoosh');
   filmTL = buildFilm(shotGeom());
   filmTL.play(0);
 }
 
-function springBack(){
-  const from = curDraw;
-  gsap.to({ d: from }, { d: 0, duration: 0.55, ease: 'elastic.out(1,0.4)', onUpdate() { setDraw(this.targets()[0].d); } });
-}
-
+/* used only by the offline ?record hook below, to time the soundtrack */
 function autoFire(){
   if (played) return;
   recT0 = performance.now(); cue('draw');       // t=0 of the soundtrack
-  gsap.to({ d: curDraw }, {
-    d: maxDraw * 0.94, duration: 0.62, ease: 'power2.inOut',
-    onUpdate() { setDraw(this.targets()[0].d); },
-    onComplete: () => gsap.delayedCall(0.16, fire),
-  });
+  gsap.delayedCall(0.5, fire);
 }
 
-archery.addEventListener('pointerdown', (e) => {
-  if (played) return;
-  drawing = true;
-  try { archery.setPointerCapture(e.pointerId); } catch (_) {}
-  startPX = e.clientX; startPY = e.clientY; startDraw = curDraw;
-  e.preventDefault();
-});
-archery.addEventListener('pointermove', (e) => {
-  if (!drawing) return;
-  // project the drag onto the pull-back axis, so dragging back along the aim
-  // (down + away from the heart) draws the string — on any shot angle.
-  const proj = (e.clientX - startPX) * pullUX + (e.clientY - startPY) * pullUY;
-  setDraw(startDraw + proj);
-});
-function endDraw(){
-  if (!drawing) return;
-  drawing = false;
-  if (curDraw > maxDraw * 0.26) fire(); else springBack();
-}
-archery.addEventListener('pointerup', endDraw);
-archery.addEventListener('pointercancel', endDraw);
-archery.addEventListener('keydown', (e) => {
-  if (played) return;
-  if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); autoFire(); }
-});
+target.addEventListener('click', fire);
 
-/* boot Act 1: reveal the target + bow + hint, then start the beat */
+/* boot Act 1: reveal the heart + hint, then start the beat */
 function enter(){
   gsap.set(hero, { autoAlpha: 1 });
-  refreshRig();
-  setDraw(0);
   gsap.set([eyebrow, hint], { opacity: 0, y: 14 });
   gsap.set(target, { opacity: 0, y: 10, scaleX: 0.9, scaleY: 0.9 });
-  gsap.set(archery, { opacity: 0, scale: 0.85 });        // scale from the grip; keeps rotation
   gsap.set(heartGlow, { opacity: 0, scale: 1 });
-  gsap.set(arrow, { opacity: 1 });
 
   const tl = gsap.timeline({ onComplete: startBeat });
   tl.to(target,   { opacity: 1, y: 0, scaleX: 1, scaleY: 1, duration: 0.8, ease: 'power3.out' }, 0.1)
     .to(heartGlow,{ opacity: 0.7, duration: 0.8, ease: 'power2.out' }, 0.2)
-    .to(archery,  { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out' }, 0.28)
     .to(eyebrow,  { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.4)
     .to(hint,     { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.7);
 }
@@ -882,7 +759,7 @@ function armReplay(){
   requestAnimationFrame(() => replay.classList.add('is-shown'));
 }
 
-/* back to Act 1, ready to be drawn again */
+/* back to Act 1, ready to be pressed again */
 function resetAll(){
   treeStop();
   showWish(false);
@@ -891,7 +768,6 @@ function resetAll(){
   if (filmTL){ filmTL.pause(0); }
   gsap.set([flood, bloom], { autoAlpha: 0 });
   gsap.set(field, { autoAlpha: 0 });
-  gsap.set(arrow, { opacity: 1, scaleY: 1 });
   played = false;
   enter();
 }
@@ -912,8 +788,6 @@ function resize(){
     filmTL = buildFilm(shotGeom());
     filmTL.pause(at);
     if (active) filmTL.play(at);
-  } else {
-    refreshRig(); setDraw(0);
   }
 }
 let resizeRAF = 0;
@@ -925,13 +799,12 @@ if (reduceMotion){
   drawFinal();
 } else {
   buildMotes();
-  document.fonts && document.fonts.ready.then(() => { refreshRig(); setDraw(0); });
   enter();
   replay.addEventListener('click', resetAll);
 }
 
 /* ============================================================
-   RECORDING HOOK — the rig draws + fires after its pre-roll
+   RECORDING HOOK — presses the heart after its pre-roll
    ============================================================ */
 if (isRecord){
   window.annivAPI = {

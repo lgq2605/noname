@@ -33,11 +33,18 @@
 *{ box-sizing:border-box; margin:0; padding:0; }
 html, body{ height:100%; }
 
+html{
+  -webkit-text-size-adjust:100%;      /* stop iOS auto-bumping text size on rotate */
+  touch-action:manipulation;          /* kill the 300ms tap delay + double-tap zoom, site-wide */
+}
+
 body{
   background:#12060c;                 /* seam colour under everything */
   overflow:hidden;
+  overscroll-behavior:none;           /* no rubber-band scroll / pull-to-refresh on a full-screen scene */
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
+  -webkit-tap-highlight-color:transparent;
   cursor:auto;
 }
 
@@ -104,7 +111,6 @@ body{
   position:absolute; top:33%; left:0; right:0;
   display:flex; justify-content:center;
   transform:translateY(-50%);         /* centre at 33% — wrap is NOT animated */
-  pointer-events:none;
 }
 .target{
   position:relative;
@@ -112,7 +118,21 @@ body{
   aspect-ratio:100/92;
   will-change:transform;
   transform-origin:50% 60%;
+  /* reset <button> chrome — this is a plain, borderless tap target */
+  display:block; border:0; background:none; padding:0; margin:0; appearance:none;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;          /* kill the 300ms tap delay + double-tap zoom */
 }
+.target:focus-visible{ outline:none; }
+.target:focus-visible .heart__svg{
+  filter:
+    drop-shadow(0 0 0 4px rgba(255,255,255,.85))
+    drop-shadow(0 10px 22px rgba(168,15,64,.34))
+    drop-shadow(0 3px 6px rgba(120,10,48,.30));
+}
+.target:hover .heart__svg{ transform:scale(1.03); }
+.target:active .heart__svg{ transform:scale(0.96); }
 .target__heart{ position:absolute; inset:0; display:block; }
 
 /* radial bloom behind the heart — swells on the beat */
@@ -132,56 +152,10 @@ body{
     drop-shadow(0 10px 22px rgba(168,15,64,.34))
     drop-shadow(0 3px 6px rgba(120,10,48,.30));
   will-change:transform;
+  transition:transform .15s var(--ease-out);
 }
 
-/* ---- the bow + arrow rig ----
-   Placed lower-left and rotated by JS to aim at the heart, so the shot travels
-   on a DIAGONAL. The whole rig (left/top + rotation around the grip) is set in
-   JS from measured geometry; everything below is in the rig's own space. */
-.archery{
-  position:absolute; top:0; left:0;    /* JS sets left/top so the grip anchors */
-  width:clamp(100px, 18vw, 168px);     /* smaller, daintier bow — delicate against the heart */
-  cursor:grab;
-  -webkit-tap-highlight-color:transparent;
-  touch-action:none;                   /* we own the drag gesture */
-  will-change:transform;
-}
-.archery:active{ cursor:grabbing; }
-.archery:focus-visible{ outline:none; }
-.archery:focus-visible .bow{ filter:drop-shadow(0 0 0 3px rgba(255,255,255,.85)) drop-shadow(0 10px 18px rgba(120,50,20,.4)); }
-.bow{
-  display:block; width:100%; height:auto;
-  filter:drop-shadow(0 12px 18px rgba(90,40,15,.3));
-  overflow:visible;
-}
-
-/* the aim line rides inside the rig, so it points straight at the heart */
-.aim{
-  position:absolute; left:50%; bottom:32%;
-  width:2px; height:190%; margin-left:-1px;
-  transform-origin:bottom center;
-  background:linear-gradient(0deg, rgba(255,214,150,.6) 0%, rgba(255,150,170,.22) 52%, transparent 78%);
-  opacity:0; pointer-events:none;
-}
-
-/* the arrow overlaps the bow at the nock and flies to the heart */
-.arrow{
-  position:absolute; left:0; right:0; margin-inline:auto;
-  bottom:36%;                          /* JS re-anchors the tail to the nock */
-  width:17.5%; height:auto;
-  overflow:visible;
-  will-change:transform;
-  filter:drop-shadow(0 5px 7px rgba(90,40,15,.36));
-}
-.arrow__wings{ transform-box:fill-box; transform-origin:50% 90%; }
-.arrow__wings .wingL,
-.arrow__wings .wingR{ transform-box:fill-box; }
-.wingL{ transform-origin:88% 60%; animation:flapL 2.6s ease-in-out infinite; }
-.wingR{ transform-origin:12% 60%; animation:flapR 2.6s ease-in-out infinite; }
-@keyframes flapL{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(-11deg); } }
-@keyframes flapR{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(11deg); } }
-
-/* ---- the draw / release hint ---- */
+/* ---- the press hint ---- */
 .hero__hint{
   position:absolute; bottom:8.5%; left:0; right:0;
   text-align:center;
@@ -426,7 +400,8 @@ body{
 .replay{
   position:absolute; right:20px; bottom:18px; z-index:7;
   display:inline-flex; align-items:center; gap:7px;
-  padding:9px 15px 9px 12px; border-radius:999px;
+  min-height:40px;
+  padding:11px 17px 11px 14px; border-radius:999px;
   font:600 12.5px/1 "Cormorant Garamond", Georgia, serif; letter-spacing:.12em; text-transform:uppercase;
   color:#8a4a5a; background:rgba(255,248,242,.72);
   border:1px solid rgba(150,60,80,.18);
