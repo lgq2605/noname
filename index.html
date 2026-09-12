@@ -1,360 +1,242 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>just because.</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --cream:#FFF6EE;
-    --cream-2:#FFEFE1;
-    --rose:#E88B9D;
-    --rose-dark:#C96B7E;
-    --plum:#3D2B32;
-    --plum-soft:#6E5A5F;
-    --sage:#8FA888;
-    --butter:#F2C14E;
-    --paper:#FFFDF9;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Happy 5 Months ♥ — a little film</title>
+  <meta name="description" content="A cinematic anniversary film in four acts: a beating heart you open with a tap, a rush of colour, a kinetic wish, and a tree that blooms into a heart of petals." />
+  <meta name="theme-color" content="#f7e7dc" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
 
-  *{ box-sizing:border-box; }
+  <!-- Share card. This link gets sent to someone on a messenger, so it needs a
+       preview instead of a bare URL. og:image must be an absolute URL — relative
+       paths are not resolved by most scrapers, and Vite's base rewrite does not
+       touch meta content. Regenerate public/og.jpg if the tree ever changes. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://YOUR-USERNAME.github.io/five-months-tree/" />
+  <meta property="og:title" content="Happy 5 Months ♥" />
+  <meta property="og:description" content="Pull back the bow, hit the heart, and watch it bloom into a tree of hearts." />
+  <meta property="og:image" content="https://YOUR-USERNAME.github.io/five-months-tree/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Happy 5 Months ♥" />
+  <meta name="twitter:description" content="Pull back the bow, hit the heart, and watch it bloom into a tree of hearts." />
+  <meta name="twitter:image" content="https://YOUR-USERNAME.github.io/five-months-tree/og.jpg" />
 
-  body{
-    margin:0;
-    min-height:100vh;
-    background:
-      repeating-linear-gradient(135deg, rgba(233,180,164,0.05) 0px, rgba(233,180,164,0.05) 2px, transparent 2px, transparent 14px),
-      radial-gradient(circle at 20% 10%, var(--cream-2), var(--cream) 60%);
-    font-family:'Quicksand', sans-serif;
-    color:var(--plum);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:4rem 1.5rem 3rem;
-  }
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&display=swap" rel="stylesheet" />
 
-  header{
-    text-align:center;
-    margin-bottom:3.5rem;
-    max-width:600px;
-  }
-
-  .eyebrow{
-    font-size:0.8rem;
-    letter-spacing:0.25em;
-    text-transform:uppercase;
-    color:var(--sage);
-    font-weight:600;
-    margin-bottom:0.6rem;
-  }
-
-  h1{
-    font-family:'Caveat', cursive;
-    font-weight:700;
-    font-size:clamp(3rem, 9vw, 4.8rem);
-    color:var(--plum);
-    margin:0;
-    line-height:1;
-    position:relative;
-    display:inline-block;
-  }
-
-  h1 .sparkle{
-    position:absolute;
-    font-size:0.35em;
-    color:var(--butter);
-    top:-0.3em;
-    right:-0.5em;
-    animation:twinkle 2.4s ease-in-out infinite;
-  }
-
-  @keyframes twinkle{
-    0%,100%{ opacity:0.3; transform:scale(0.8) rotate(0deg); }
-    50%{ opacity:1; transform:scale(1.15) rotate(15deg); }
-  }
-
-  .subtitle{
-    margin-top:0.8rem;
-    font-size:1.05rem;
-    color:var(--plum-soft);
-    font-weight:500;
-  }
-
-  .hint{
-    margin-top:0.5rem;
-    font-size:0.85rem;
-    color:var(--rose-dark);
-    font-weight:600;
-  }
-
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(190px, 1fr));
-    gap:2.6rem 2rem;
-    max-width:920px;
-    width:100%;
-  }
-
-  .polaroid{
-    perspective:1200px;
-    cursor:pointer;
-  }
-
-  .polaroid:nth-child(6n+1) .polaroid-inner{ transform:rotate(-3deg); }
-  .polaroid:nth-child(6n+2) .polaroid-inner{ transform:rotate(2deg); }
-  .polaroid:nth-child(6n+3) .polaroid-inner{ transform:rotate(-2deg); }
-  .polaroid:nth-child(6n+4) .polaroid-inner{ transform:rotate(4deg); }
-  .polaroid:nth-child(6n+5) .polaroid-inner{ transform:rotate(-4deg); }
-  .polaroid:nth-child(6n+6) .polaroid-inner{ transform:rotate(3deg); }
-
-  .polaroid.flipped:nth-child(6n+1) .polaroid-inner{ transform:rotate(-3deg) rotateY(180deg); }
-  .polaroid.flipped:nth-child(6n+2) .polaroid-inner{ transform:rotate(2deg) rotateY(180deg); }
-  .polaroid.flipped:nth-child(6n+3) .polaroid-inner{ transform:rotate(-2deg) rotateY(180deg); }
-  .polaroid.flipped:nth-child(6n+4) .polaroid-inner{ transform:rotate(4deg) rotateY(180deg); }
-  .polaroid.flipped:nth-child(6n+5) .polaroid-inner{ transform:rotate(-4deg) rotateY(180deg); }
-  .polaroid.flipped:nth-child(6n+6) .polaroid-inner{ transform:rotate(3deg) rotateY(180deg); }
-
-  .polaroid-inner{
-    position:relative;
-    width:100%;
-    aspect-ratio:0.82;
-    transform-style:preserve-3d;
-    transition:transform 0.6s cubic-bezier(.2,.9,.3,1.1), box-shadow 0.3s ease;
-  }
-
-  .polaroid:hover .polaroid-inner,
-  .polaroid:focus-visible .polaroid-inner{
-    box-shadow:0 18px 30px -12px rgba(61,43,50,0.35);
-  }
-
-  .polaroid:focus-visible{
-    outline:3px solid var(--sage);
-    outline-offset:4px;
-    border-radius:6px;
-  }
-
-  .face{
-    position:absolute;
-    inset:0;
-    backface-visibility:hidden;
-    background:var(--paper);
-    border-radius:4px;
-    box-shadow:0 8px 18px -8px rgba(61,43,50,0.28);
-    padding:0.7rem 0.7rem 1rem;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-  }
-
-  .face.back{
-    transform:rotateY(180deg);
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:1.2rem;
-  }
-
-  .photo{
-    flex:1;
-    min-height:0;
-    min-width:0;
-    overflow:hidden;
-    border-radius:2px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.8rem;
-    color:rgba(255,255,255,0.75);
-  }
-
-  .photo img{
-    display:block;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:center;
-    border-radius:2px;
-  }
-
-  .caption{
-    font-family:'Quicksand', sans-serif;
-    font-weight:700;
-    font-style:italic;
-    font-size:1.05rem;
-    text-align:center;
-    margin-top:0.5rem;
-    color:var(--plum);
-  }
-
-  .note{
-    font-family:'Quicksand', sans-serif;
-    font-weight:600;
-    font-style:italic;
-    font-size:1.1rem;
-    line-height:1.5;
-    color:var(--plum);
-  }
-
-  .note-date{
-    margin-top:0.6rem;
-    font-family:'Quicksand', sans-serif;
-    font-size:0.7rem;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color:var(--sage);
-    font-weight:600;
-  }
-
-  .tape{
-    position:absolute;
-    top:-14px;
-    left:50%;
-    width:60px;
-    height:24px;
-    transform:translateX(-50%) rotate(-4deg);
-    background:repeating-linear-gradient(45deg, rgba(255,255,255,0.35) 0 4px, transparent 4px 8px);
-    opacity:0.9;
-    z-index:2;
-    border-radius:1px;
-  }
-
-  .polaroid:nth-child(3n+1) .tape{ background-color:rgba(232,139,157,0.55); }
-  .polaroid:nth-child(3n+2) .tape{ background-color:rgba(143,168,136,0.55); }
-  .polaroid:nth-child(3n+3) .tape{ background-color:rgba(242,193,78,0.55); }
-
-  footer{
-    margin-top:4rem;
-    font-family:'Caveat', cursive;
-    font-size:1.3rem;
-    color:var(--plum-soft);
-    text-align:center;
-  }
-
-  @media (max-width:520px){
-    .polaroid-inner{ transform:rotate(0deg) !important; }
-    .polaroid.flipped .polaroid-inner{ transform:rotateY(180deg) !important; }
-    .grid{ grid-template-columns:1fr 1fr; gap:1.8rem 1.2rem; }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .polaroid-inner{ transition:none; }
-    h1 .sparkle{ animation:none; }
-  }
-</style>
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="./anniversary.css" />
 </head>
 <body>
+  <main class="scene">
 
-<header>
-  <div class="eyebrow">no reason needed</div>
-  <h1>just because.<span class="sparkle">✦</span></h1>
-  <p class="subtitle">a little collection of us</p>
-  <p class="hint">tap a photo for a note on the back</p>
-</header>
+    <!-- The tree world (Act 4). One canvas; it stays transparent until the
+         intro hands off, then it draws its own warm sky + blossom tree. -->
+    <canvas id="tree" class="tree" aria-label="A blossom tree grows and blooms into a heart made of petals" role="img"></canvas>
 
-<div class="grid" id="grid"></div>
+    <!-- ACT 1 — THE INVITATION ------------------------------------------------
+         A single beating heart on a warm field. It is the only thing the
+         visitor has to do: tap it. Real <button> so it is tappable + keyboard
+         focusable; everything decorative around it is aria-hidden. -->
+    <section class="hero" id="hero" aria-label="Draw the bow to open your card">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="hero__motes" id="motes" aria-hidden="true"></div>
 
-<footer>Made with care and motivation and miss you- Human</footer>
+      <p class="hero__eyebrow" id="eyebrow">a little something, for you</p>
 
-<script>
-  /* ============================================================
-     CUSTOMIZE ME
-     - Change title/subtitle above in the <header> HTML directly.
-     - Edit the memories list below: one entry per polaroid.
-     - "img": leave as null to use a soft color placeholder,
-       or set it to a photo path/URL, e.g. "img": "photos/1.jpg"
-       (put an actual photo file next to this HTML file, or use
-       a full https:// link).
-     - "gradient": only used when img is null — pick any CSS
-       gradient you like for that placeholder card.
-     - "caption": short line under the photo (front of the card).
-     - "note": the handwritten message revealed when flipped.
-     - "date": small label in the corner of the note.
-  ============================================================ */
-  const memories = [
-    {
-      img: "first.jpg",
-      gradient: "linear-gradient(135deg, #E88B9D, #F2C14E)",
-      caption: "The first date",
-      note: "Falling in love when exams are just around the corner.",
-      date: "16/05/2026"
-    },
-    {
-      img: "ptb.jpg",
-      gradient: "linear-gradient(135deg, #8FA888, #C9DABF)",
-      caption: "Photobooth picture",
-      note: "Ai đó nói thi PTNK tiếng Anh trên 8 thì gửi mà tui không trên 8 thì vẫn gửi^^",
-      date: "10/06/2026"
-    },
-    {
-      img: "sky.jpg",
-      gradient: "linear-gradient(135deg, #F2C14E, #E88B9D)",
-      caption: "Sky",
-      note: "Thật ra lúc đó anh tải về chỉ vì muốn chơi chung với em:>",
-      date: "19/06/2026"
-    },
-    {
-      img: "flower.jpg",
-      gradient: "linear-gradient(135deg, #E88B9D, #8FA888)",
-      caption: "Hoa",
-      note: "Nhớ lúc đó em nói tặng hoa thành chính thức nên mua tặng em chứ em không nói thì anh vẫn tặng.",
-      date: "22/06/2026"
-    },
-    {
-      img: "movie.jpg",
-      gradient: "linear-gradient(135deg, #C96B7E, #F2C14E)",
-      caption: "Đi xem phim chung với mk và tuyên nè",
-      note: "Trong rạp ngồi phát cơm cho tuyên ăn:)))",
-      date: "18/07/2026"
-    },
-    {
-      img: "letters.jpg",
-      gradient: "linear-gradient(135deg, #8FA888, #E88B9D)",
-      caption: "Thư tình",
-      note: "Hog biéc ai viết cho anh vậy ta?",
-      date: "18/07/2026"
-    }
-    
-  ];
-
-  const grid = document.getElementById('grid');
-
-  memories.forEach((m, i) => {
-    const card = document.createElement('div');
-    card.className = 'polaroid';
-    card.tabIndex = 0;
-    card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', `Memory: ${m.caption}. Press to flip and read the note.`);
-
-    const photoContent = m.img
-      ? `<img src="${m.img}" alt="${m.caption}">`
-      : '';
-
-    card.innerHTML = `
-      <div class="polaroid-inner">
-        <div class="face front">
-          <span class="tape"></span>
-          <div class="photo" style="${m.img ? '' : `background:${m.gradient}`}">${photoContent}</div>
-          <div class="caption">${m.caption}</div>
-        </div>
-        <div class="face back">
-          <div class="note">${m.note}</div>
-          <div class="note-date">${m.date}</div>
+      <!-- THE TARGET — the heart the arrow flies to (GSAP animates .target) -->
+      <div class="targetWrap" aria-hidden="true">
+        <div class="target" id="target">
+          <span class="heart__glow" aria-hidden="true"></span>
+          <span class="target__heart" id="targetHeart">
+            <svg class="heart__svg" viewBox="0 0 100 92" aria-hidden="true">
+              <defs>
+                <radialGradient id="hg" cx="38%" cy="30%" r="80%">
+                  <stop offset="0%"  stop-color="#ffd9e4" />
+                  <stop offset="42%" stop-color="#ff6f97" />
+                  <stop offset="82%" stop-color="#d81e57" />
+                  <stop offset="100%" stop-color="#9d0f3e" />
+                </radialGradient>
+                <linearGradient id="hsheen" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%"  stop-color="rgba(255,255,255,.85)" />
+                  <stop offset="34%" stop-color="rgba(255,255,255,0)" />
+                </linearGradient>
+              </defs>
+              <path d="M50 86.5C26 68 10.5 53.6 10.5 34.6 10.5 20.4 21 11 33.2 11c8.6 0 14.2 4.7 16.8 11.4C52.6 15.7 58.2 11 66.8 11 79 11 89.5 20.4 89.5 34.6 89.5 53.6 74 68 50 86.5Z" fill="url(#hg)" />
+              <path d="M50 86.5C26 68 10.5 53.6 10.5 34.6 10.5 20.4 21 11 33.2 11c8.6 0 14.2 4.7 16.8 11.4C52.6 15.7 58.2 11 66.8 11 79 11 89.5 20.4 89.5 34.6 89.5 53.6 74 68 50 86.5Z" fill="url(#hsheen)" opacity=".7" />
+              <ellipse cx="34" cy="30" rx="8.5" ry="5.4" fill="#fff" opacity=".72" style="mix-blend-mode:screen" />
+            </svg>
+          </span>
         </div>
       </div>
-    `;
 
-    const toggle = () => card.classList.toggle('flipped');
-    card.addEventListener('click', toggle);
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
-    });
+      <!-- THE BOW + ARROW — draw the string back, release to fire. The rig is
+           placed lower-left and rotated by JS to aim at the heart, so the shot
+           travels on a diagonal. A real control: role=button + keyboard drag. -->
+      <div class="archery" id="archery" role="button" tabindex="0"
+           aria-label="Draw the bow and release to send the arrow to the heart">
 
-    grid.appendChild(card);
-  });
-</script>
+          <!-- aim line, inside the rig so it points straight at the heart -->
+          <div class="aim" id="aim" aria-hidden="true"></div>
 
+          <!-- realistic recurve bow: wooden limbs, leather grip, a live string -->
+          <svg class="bow" id="bow" viewBox="0 0 460 300" aria-hidden="true">
+            <defs>
+              <linearGradient id="limb" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0"   stop-color="#4a2a1a" />
+                <stop offset=".18" stop-color="#6b3f24" />
+                <stop offset=".5"  stop-color="#8a5127" />
+                <stop offset=".82" stop-color="#6b3f24" />
+                <stop offset="1"   stop-color="#4a2a1a" />
+              </linearGradient>
+              <linearGradient id="limbHi" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="rgba(255,214,160,.8)" />
+                <stop offset="1" stop-color="rgba(255,214,160,0)" />
+              </linearGradient>
+              <linearGradient id="grip" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#2a1a10" />
+                <stop offset=".5" stop-color="#5a3822" />
+                <stop offset="1" stop-color="#2a1a10" />
+              </linearGradient>
+            </defs>
+            <!-- limb body (taper faked with two stacked strokes) -->
+            <path class="bow__limb" d="M34 96 C 118 168, 168 240, 230 252 C 292 240, 342 168, 426 96"
+                  fill="none" stroke="url(#limb)" stroke-width="13" stroke-linecap="round" />
+            <path class="bow__limbHi" d="M34 96 C 118 168, 168 240, 230 252 C 292 240, 342 168, 426 96"
+                  fill="none" stroke="url(#limbHi)" stroke-width="3" stroke-linecap="round" opacity=".7" />
+            <!-- recurve tip hooks -->
+            <path d="M34 96 C 22 82, 26 70, 40 66" fill="none" stroke="url(#limb)" stroke-width="8" stroke-linecap="round" />
+            <path d="M426 96 C 438 82, 434 70, 420 66" fill="none" stroke="url(#limb)" stroke-width="8" stroke-linecap="round" />
+            <!-- leather grip over the belly -->
+            <rect x="216" y="206" width="28" height="70" rx="9" fill="url(#grip)" />
+            <path d="M219 220h22 M219 236h22 M219 252h22" stroke="rgba(0,0,0,.35)" stroke-width="2" />
+            <!-- the string: two segments meeting at the nock (JS animates the nock).
+                 A warm taupe so the taut string actually reads against the cream. -->
+            <line class="bow__str" id="strL" x1="40" y1="70" x2="230" y2="96" stroke="#9a8068" stroke-width="2.2" stroke-linecap="round" />
+            <line class="bow__str" id="strR" x1="420" y1="70" x2="230" y2="96" stroke="#9a8068" stroke-width="2.2" stroke-linecap="round" />
+            <circle class="bow__serving" id="serving" cx="230" cy="96" r="4.5" fill="#6f5137" />
+          </svg>
+
+          <!-- the arrow: winged golden heart tip (Cupid), gold feather fletching -->
+          <svg class="arrow" id="arrow" viewBox="0 0 64 220" aria-hidden="true">
+            <defs>
+              <linearGradient id="shaft" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#4a2c14" />
+                <stop offset=".5" stop-color="#8a5a2c" />
+                <stop offset="1" stop-color="#3e2410" />
+              </linearGradient>
+              <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ffe38c" />
+                <stop offset=".45" stop-color="#f4a626" />
+                <stop offset="1" stop-color="#a85f0e" />
+              </linearGradient>
+              <linearGradient id="feath" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ff7f9c" />
+                <stop offset=".5" stop-color="#e6396a" />
+                <stop offset="1" stop-color="#a8154a" />
+              </linearGradient>
+              <linearGradient id="wing" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffffff" />
+                <stop offset="1" stop-color="#ffe0c4" />
+              </linearGradient>
+            </defs>
+
+            <!-- shaft (dark wood so it reads against the cream) -->
+            <rect x="29.4" y="30" width="5.2" height="168" rx="2.6" fill="url(#shaft)" />
+
+            <!-- angel wings flanking the heart tip -->
+            <g class="arrow__wings">
+              <path class="wingL" d="M31 30 C 10 16, 2 20, 4 34 C 12 30, 20 32, 31 40 Z" fill="url(#wing)" stroke="rgba(196,132,58,.72)" stroke-width="1.2"/>
+              <path class="wingR" d="M33 30 C 54 16, 62 20, 60 34 C 52 30, 44 32, 33 40 Z" fill="url(#wing)" stroke="rgba(196,132,58,.72)" stroke-width="1.2"/>
+            </g>
+
+            <!-- golden heart arrowhead (Cupid's love arrow) -->
+            <path class="arrow__head" d="M32 12 C 30 7, 22 6.5, 21.5 13 C 21 18, 27 22, 32 27 C 37 22, 43 18, 42.5 13 C 42 6.5, 34 7, 32 12 Z" fill="url(#gold)" stroke="#a5701a" stroke-width=".8" />
+            <ellipse cx="27" cy="13" rx="2.6" ry="1.7" fill="#fff" opacity=".8" style="mix-blend-mode:screen" />
+
+            <!-- gold feather fletching -->
+            <g class="arrow__fletch">
+              <path d="M32 150 C 16 156, 10 178, 15 200 C 24 194, 30 184, 32 176 Z" fill="url(#feath)" />
+              <path d="M32 150 C 48 156, 54 178, 49 200 C 40 194, 34 184, 32 176 Z" fill="url(#feath)" opacity=".92" />
+              <path d="M28 160l4 3 M26 170l6 3 M25 180l7 3" stroke="rgba(130,12,48,.45)" stroke-width="1" />
+              <path d="M36 160l-4 3 M38 170l-6 3 M39 180l-7 3" stroke="rgba(130,12,48,.45)" stroke-width="1" />
+            </g>
+            <!-- nock -->
+            <path d="M29 200 L32 205 L35 200" fill="none" stroke="#c9a25a" stroke-width="2" stroke-linecap="round"/>
+            <!-- invisible tip marker: JS measures it to land the head on the heart -->
+            <circle id="tip" cx="32" cy="9" r="0.6" fill="none" />
+          </svg>
+      </div>
+
+      <p class="hero__hint" id="hint">pull &amp; release</p>
+    </section>
+
+    <!-- ACT 2 — THE FLOOD -----------------------------------------------------
+         The heart bursts into this circle at its landing point, and it swallows
+         the frame in rose. Same trick as the intro dot: no cross-fade anywhere,
+         the colour just arrives. -->
+    <div class="flood" id="flood" aria-hidden="true"></div>
+
+    <!-- ACT 3 — THE WISH (kinetic type on the flood) --------------------------
+         Lives inside the flood's own colour, revealed by it. Every glyph hinges
+         up out of its mask — nothing fades. -->
+    <div class="field" id="field" aria-hidden="true">
+      <div class="blob blob--1"></div>
+      <div class="blob blob--2"></div>
+      <div class="blob blob--3"></div>
+      <div class="fgrid" id="fgrid"></div>
+      <div class="fvignette"></div>
+
+      <div class="camera" id="camera">
+        <p class="kEyebrow" id="kEyebrow">here&rsquo;s to us&hellip;</p>
+        <h2 class="headline" id="headline">
+          <span class="hl__line"><span class="mask"><span class="hl__word" id="wLine1">Happy</span></span></span>
+          <span class="hl__line"><span class="mask"><span class="hl__word" id="wLine2">5 Months</span></span></span>
+        </h2>
+        <svg class="uline" id="uline" viewBox="0 0 300 26" fill="none" aria-hidden="true">
+          <path class="uline__path" d="M8 16C56 7 132 4 178 6c30 1 78 5 114 12-40 3-108 4-176 3"
+                stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <p class="kSub" id="kSub">of loving you, and counting</p>
+      </div>
+
+      <div class="bar bar--top" id="barTop"></div>
+      <div class="bar bar--bot" id="barBot"></div>
+    </div>
+
+    <!-- The gold light that bridges the rose wish into the dawn of the tree. -->
+    <div class="bloom" id="bloom" aria-hidden="true"></div>
+
+    <!-- ACT 4 — THE HAND-LETTERED WISH (over the tree) ------------------------ -->
+    <div class="wish" id="wish" aria-hidden="true">
+      <p class="wish__eyebrow" id="wEyebrow">and&hellip; make it count</p>
+      <div class="wish__heroWrap"><h1 class="wish__hero" id="wHero">Happy 5 Months</h1></div>
+      <span class="wish__rule" id="wRule"></span>
+      <p class="wish__sub" id="wSub">here&rsquo;s to many more together</p>
+    </div>
+
+    <!-- Play the film again once it has settled. -->
+    <button class="replay" id="replay" type="button" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15">
+        <path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z" fill="currentColor" />
+      </svg>
+      Again
+    </button>
+
+    <!-- One lens over the whole film: vignette + fine grain. -->
+    <div class="grade" aria-hidden="true">
+      <div class="grade__vignette"></div>
+      <div class="grade__grain"></div>
+    </div>
+  </main>
+
+  <!-- Accessible equivalent for reduced-motion + screen readers. -->
+  <p class="sr-only">Happy 5 Months. Here&rsquo;s to many more together.</p>
+
+  <script type="module" src="./anniversary.js"></script>
 </body>
 </html>
