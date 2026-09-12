@@ -12,5 +12,5 @@ import { defineConfig } from 'vite'
 // .github/workflows/deploy.yml — never the raw source, or the browser hits the
 // un-bundled `import 'gsap'` and the film never runs.
 export default defineConfig({
-  base: '/five-months-tree/',
+  base: '/noname/',
 })
